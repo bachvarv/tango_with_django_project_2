@@ -1,5 +1,26 @@
 # Django settings for tango_with_django_project project.
 
+#Import for the Path
+import os
+
+# Absolute Path to the workspace dir of the project
+SETTINGS_DIR = os.path.dirname('__file__')
+
+# SETTINGS_DIR = os.path.abspath(SETTINGS_DIR)
+# 
+# print(SETTINGS_DIR)
+# 
+# PROJECT_PATH = os.path.join(SETTINGS_DIR, os.pardir)
+
+PROJECT_PATH = os.path.abspath(SETTINGS_DIR)
+
+# The Absolute path to the Template direktory
+TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
+STATIC_PATH = os.path.join(PROJECT_PATH, 'static')
+MEDIA_PATH = os.path.join(PROJECT_PATH, 'media')
+
+print(TEMPLATE_PATH)
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -50,12 +71,12 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = MEDIA_PATH
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://example.com/media/", "http://media.example.com/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -72,6 +93,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    STATIC_PATH,
 )
 
 # List of finder classes that know how to find static files in
@@ -107,10 +129,14 @@ ROOT_URLCONF = 'tango_with_django_project.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'tango_with_django_project.wsgi.application'
 
+
+
 TEMPLATE_DIRS = (
+    
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    TEMPLATE_PATH,
 )
 
 INSTALLED_APPS = (
