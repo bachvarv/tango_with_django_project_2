@@ -1,4 +1,10 @@
 import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tango_with_django_project.settings')
+
+import django
+django.setup()
+
+from rango.models import Page, Category
 
 def populate():
     python_cat = add_cat('Python', views=128, likes=64)
@@ -41,6 +47,10 @@ def populate():
              title="Flask",
              url="http://flask.pocoo.org",
              views=312)
+
+    add_page(cat=frame_cat,
+             title="Bottle",
+             url="http://bottlepy.org/docs/dev/")
     
     for c in Category.objects.all():
         for p in Page.objects.filter(category=c):
@@ -48,6 +58,7 @@ def populate():
             
 def add_page(cat, title, url, views=0):
     p = Page.objects.get_or_create(category=cat, title=title, url=url,view=views)[0]
+    p.save()
     return p
 
 def add_cat(name, views, likes):
