@@ -37,6 +37,7 @@ def category(request, category_name_slug):
         category = Category.objects.get(slug=category_name_slug)
 
         context_dict['category_name'] = category.name
+        context_dict['category_slug'] = category.slug
 
         #category = Category.objects.get(name=category_name)
         
@@ -151,6 +152,6 @@ def add_page(request, category_name_slug):
     else:
         form = PageForm()
 
-    context_dict = {'form': form, 'category': cat}
+    context_dict = {'form': form, 'category': cat, 'category_slug': cat.slug}
 
     return render(request, 'rango/add_page.html', context_dict)
