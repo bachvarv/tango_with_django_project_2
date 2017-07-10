@@ -20,6 +20,7 @@ STATIC_PATH = os.path.join(PROJECT_PATH, 'static')
 MEDIA_PATH = os.path.join(PROJECT_PATH, 'media')
 DATABASE_PATH = os.path.join(PROJECT_PATH, 'rango.db')
 
+LOGIN_URL = '/rango/login/'
 
 print(TEMPLATE_PATH)
 
