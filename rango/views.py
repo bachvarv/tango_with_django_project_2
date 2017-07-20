@@ -1,5 +1,6 @@
 # Create your views here.
 import profile
+from datetime import datetime
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -8,6 +9,7 @@ from django.template import RequestContext
 from django.shortcuts import render
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
+
 
 
 
@@ -72,7 +74,9 @@ def index(request):
     # Request the Context of the request
     # The context contains information such as the client's machine details, for example.
 
-    
+    request.session.set_test_cookie()
+
+
     # Construct a dictionary to pass to the template engine as its context.
     # Note the key boldmessage is the same as {{ boldmessage }} in the template!
     #Lesson 4
@@ -84,7 +88,11 @@ def index(request):
     # Place the list in our context_dict dictionary which will be passed to the template engine.
     category_list = Category.objects.order_by('-likes')[:5]
     context_dict = {'categories': category_list}
-    
+
+
+
+
+
     try:
         toppages = Page.objects.order_by('-view')[:5]
         
@@ -102,9 +110,37 @@ def index(request):
     # Return a rendered response to send to the client.
     # We make use of the shortcut function to make our lives easier.
     # Note that the first parameter is the template we wish to use.
-    
+
+    #Cookies
+
+    vis = int(request.COOKIES.get('visits', '0'))
+    reset_last_visit_time = False
+    response = render(request, 'rango/index.html', context_dict)
+
+
+
+
+    if 'last_visit' in request.COOKIES :
+        last_visit = request.COOKIES['last_visit']
+        last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+
+        if (datetime.now() - last_visit_time).days > 5:
+            vis = vis + 1
+            reset_last_visit_time = True
+    else:
+        reset_last_visit_time = True;
+        context_dict['visits'] = vis
+
+        response = render(request, 'rango/index.html', context_dict)
+
+
+        if(reset_last_visit_time):
+            response.set_cookie('last_visit', datetime.now())
+            response.set_cookie('visits', vis)
+
+
     #Lesson 4
-    return render(request, 'rango/index.html', context_dict)
+    return response
     
     #Lesson 3
     #return HttpResponse("Rango says hello world! <a href='/rango/about/'>About</a>")
@@ -164,6 +200,10 @@ def add_page(request, category_name_slug):
     return render(request, 'rango/add_page.html', context_dict)
 
 def register(request):
+
+    if request.session.test_cookie_worked():
+        print ">>>>> Test Cookie worked!"
+        request.session.delete_test_cookie()
 
     registered = False
 

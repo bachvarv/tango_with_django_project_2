@@ -1,15 +1,12 @@
-<!DOCTYPE html>
 
-{% load static %}
 
-<html>
-	<head>
-		<title> Rango </title>
-		<!--link rel="stylesheet" href="{% static "css/base.css" %}" />
-		<!--script src="{% static "js/jquery.js" %}"></script-->
-	</head>
-	
-	<body>
+{% extends 'base.html' %}
+
+
+
+{% block title %} Rango {% endblock %}
+
+{% block body_block %}
         {% if user.is_authenticated %}
 		    <h1>Rango says... hello {{ user.username }}</h1>
         {% else %}
@@ -21,11 +18,11 @@
 		{% if categories %}
 			<ul>
 				{% for category in categories %}
-				<li><a href="/rango/category/{{ category.slug }}">{{ category.name }}</a></li>
+				<li><a href="{% url 'category' category.slug%}">{{ category.name }}</a></li>
 				{% endfor %}
 			</ul>
 		{% else %}
-			<strong> There are no categories present. <\strong>
+			<strong> There are no categories present. </strong>
 		{% endif %}
 		
 		<h2>Top 5 Pages</h2>
@@ -40,7 +37,7 @@
 		{% endif %}
 
 
-		<a href="/rango/about/">About</a><br />
+{% comment %}		<a href="/rango/about/">About</a><br />
 		<!--a href="/rango/category/">Category</a><br /-->
         {% if user.is_authenticated %}
             <a href="/rango/restricted">Restricted Page</a><br />
@@ -49,10 +46,8 @@
         {% else %}
             <a href="/rango/register/">Register Here</a> <br/>
             <a href="/rango/login/">Login to Rango</a> <br/>
-        {% endif %}
+        {% endif %}{% endcomment %}
 
-		<!--img src="{% static "rango.jpg" %}" alt="Picture of Rango" /-->
+
 		
-	</body>
-
-</html>
+{% endblock %}
